@@ -105,6 +105,32 @@ jobs:
           asset_name: fluffychat.apk
           asset_content_type: application/vnd.android.package-archive
 
+  build_windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: type .github/workflows/versions.env | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Install Flutter
+        run: |
+          git clone --branch ${{ env.FLUTTER_VERSION }} https://github.com/flutter/flutter.git
+          .\flutter\bin\flutter doctor
+      - uses: moonrepo/setup-rust@v1
+      - run: .\flutter\bin\flutter pub get
+      - name: Build Windows Release
+        run: .\flutter\bin\flutter build windows
+      - name: Create archive
+        run: Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath fluffychat-windows-x64.zip
+      - name: Upload to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: fluffychat-windows-x64.zip
+          asset_name: fluffychat-windows-x64.zip
+          asset_content_type: application/zip
+
+  
   build_linux:
     strategy:
       matrix:
