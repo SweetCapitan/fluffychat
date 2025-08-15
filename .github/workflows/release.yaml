@@ -118,7 +118,7 @@ jobs:
       - run: .\flutter\bin\flutter pub get
       - name: Install OpenSSL 3
         run: |
-          choco install openssl --version=3.2.1 --force --yes
+          choco install openssl --yes --force
           echo "OPENSSL_DIR=C:\Program Files\OpenSSL-Win64" >> $env:GITHUB_ENV
       - name: Build Windows Release
         run: .\flutter\bin\flutter build windows
