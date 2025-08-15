@@ -117,7 +117,7 @@ jobs:
       - uses: moonrepo/setup-rust@v1
       - run: .\flutter\bin\flutter pub get
       - name: Install OpenSSL 3
-      - run: |
+        run: |
           choco install openssl --version=3.2.1 --force --yes
           echo "OPENSSL_DIR=C:\Program Files\OpenSSL-Win64" >> $env:GITHUB_ENV
       - name: Build Windows Release
